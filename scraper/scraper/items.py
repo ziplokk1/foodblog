@@ -12,3 +12,6 @@ class ScraperItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
     post_content = scrapy.Field()
+    title = scrapy.Field()
+    ingredients = scrapy.Field()
+    summary = scrapy.Field()

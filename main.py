@@ -1,16 +1,31 @@
 import markovify
+import pandas
+from random import randint
+import string
+printable = set(string.ascii_letters)
 
-# Get raw text as string.
-with open("scraper/out.csv") as f:
-    text = f.read()
+# ingredients,post_content,summary,title
+frame = pandas.read_csv('./scraper/out.csv')
 
-# Build the model.
-text_model = markovify.Text(text)
+title_model = markovify.Text(' '.join(frame['title'].dropna().values))
+# ingredients_train = ' '.join(frame.ingredients.dropna().values).encode('ascii', errors='ignore').decode()
+# print(ingredients_train)
+# ingredients_model = markovify.Text(ingredients_train)
+post_model = markovify.Text(' '.join(frame.post_content.dropna().values))
+summary_model = markovify.Text(' '.join(frame.summary.dropna().values))
 
-# Print five randomly-generated sentences
-for i in range(5):
-    print(text_model.make_sentence())
+print('________ TITLE _______')
+title = title_model.make_short_sentence(30)
+print(title)
 
-# Print three randomly-generated sentences of no more than 280 characters
-for i in range(3):
-    print(text_model.make_short_sentence(280))
+print('______ SUMMARY ________')
+summary = summary_model.make_sentence()
+print(summary)
+
+print('________ POST ________')
+post_content = '\n'.join([post_model.make_sentence() for i in range(randint(6, 15))])
+print(post_content)
+
+# print('_______ INGREDIENTS _______')
+# ingredients = '\n'.join([ingredients_model.make_short_sentence(5) for i in range(randint(4, 10))])
+# print(ingredients)
